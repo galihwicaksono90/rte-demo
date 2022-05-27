@@ -1,51 +1,42 @@
 import { useState } from "react";
-import { RichTextEditor } from "@mantine/rte";
+import RichTextEditor from "jodit-react";
+/* import { RichTextEditor } from "@mantine/rte"; */
 import {
-  Modal,
+  Stack,
+  Text,
   Group,
+  TypographyStylesProvider,
   Container,
   Button,
-  TypographyStylesProvider,
-  Box,
-  Stack,
+  Title,
 } from "@mantine/core";
 
-function App() {
-  const [value, setValue] = useState("");
-  const [showRaw, setShowRaw] = useState(false);
-
-  const onChange = (data: string) => {
-    setValue(data);
-  };
+export default function Example() {
+  const [content, setContent] = useState("");
 
   return (
-    <div className="App">
-      <Container size={1200} my={20}>
-        <Group py={20} position="apart">
-          <h1>Rich Text Editor Demo</h1>
-          <Button onClick={() => setShowRaw((o) => !o)}>Show Raw Value</Button>
+    <Container size={1128}>
+      <Stack spacing={40} pt={20}>
+        <Group position="apart">
+          <Text variant="link" href="https://xdsoft.net/jodit/" component="a">
+            <Title>Jodit-react</Title>
+          </Text>
+          <Button onClick={() => console.log(content)}>
+            Log Raw Contents to Console
+          </Button>
         </Group>
-        <RichTextEditor onChange={onChange} value={value} />
-        <Stack spacing={20}>
-          <h1>Rendered</h1>
-          <TypographyStylesProvider>
-            <div dangerouslySetInnerHTML={{ __html: value }} />
-          </TypographyStylesProvider>
-        </Stack>
-      </Container>
-      <Modal
-        opened={showRaw}
-        onClose={() => setShowRaw((o) => !o)}
-        title={<h1>Output Value</h1>}
-        size={1200}
-      >
-        <Button onClick={() => console.log(value)} mb={20}>
-          Print to Console
-        </Button>
-        <Box sx={{ background: "#eee" }}>{value}</Box>
-      </Modal>
-    </div>
+        <TypographyStylesProvider>
+          <RichTextEditor
+            value={content}
+            config={{ uploader: { insertImageAsBase64URI: true } }}
+            onBlur={(newContent) => setContent(newContent)}
+            onChange={() => {}}
+          />
+        </TypographyStylesProvider>
+        <TypographyStylesProvider>
+          <div dangerouslySetInnerHTML={{ __html: content }} />
+        </TypographyStylesProvider>
+      </Stack>
+    </Container>
   );
 }
-
-export default App;
